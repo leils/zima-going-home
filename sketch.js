@@ -1,10 +1,10 @@
 //---------------
 //Serial
-let portAddr = "/dev/tty.usbmodem144201";
+let portAddr = "/dev/tty.usbmodem141201";
 
 //Distances
 const boundaryOne = 200;
-const boundaries = [80,60,40];
+const boundaries = [700,500,300];
 const buffer = 5;
 
 let lastData;
@@ -21,8 +21,6 @@ let vids = [];
 //video control
 let videoPlaying = 1;
 let isPlaying = false;
-
-
 
 function serverConnected() {
   print("Connected to Server");
@@ -60,14 +58,6 @@ function handleAvgData() {
       playVid(i);
     }
   }
-  // if (lastAvg < boundaryOne && avgData > boundaryOne) {
-  //   videoPlaying = farVid;
-  //   console.log("Play circ1");
-  //
-  // } else if (lastAvg > boundaryOne && avgData < boundaryOne) {
-  //   videoPlaying = midVid;
-  //   console.log("Play circ2");
-  // }
   lastAvg = avgData;
 }
 
@@ -128,7 +118,7 @@ function setup() {
 }
 
 function playVid(i) {
-  console.log("playing video " + i)
+  console.log("playing video " + i + " at avgData " + avgData);
   vids[videoPlaying].stop();
   vids[videoPlaying].hide();
 
@@ -141,15 +131,15 @@ function playVid(i) {
 function keyPressed() {
   switch(keyCode) {
     case 49: //1
-      avgData = 100;
+      avgData = 300;
       handleAvgData();
       break;
     case 50: //2
-      avgData = 70;
+      avgData = 200;
       handleAvgData();
       break;
     case 51: //3
-      avgData = 50;
+      avgData = 100;
       handleAvgData();
       break;
     case 52: //4
