@@ -4,6 +4,8 @@ let portAddr = "/dev/tty.usbmodem144201";
 
 //Distances
 const boundaryOne = 200;
+const boundaries = [80,60,40];
+const buffer = 5;
 
 let lastData;
 
@@ -48,15 +50,24 @@ function gotError(theerror) {
 }
 
 function handleAvgData() {
-  if (lastAvg < boundaryOne && avgData > boundaryOne) {
-    videoPlaying = farVid;
-    console.log("Play circ1");
-
-  } else if (lastAvg > boundaryOne && avgData < boundaryOne) {
-    videoPlaying = midVid;
-    console.log("Play circ2");
-
+  for (let i = 0; i < boundaries.length; i++ ) {
+    bound = boundaries[i];
+    if (lastAvg > bound && avgData <= bound ) {
+    //crossing nearer
+      playVid(i + 1);
+    } else if (avgData > bound && lastAvg <= bound) {
+      //crossing farther
+      playVid(i);
+    }
   }
+  // if (lastAvg < boundaryOne && avgData > boundaryOne) {
+  //   videoPlaying = farVid;
+  //   console.log("Play circ1");
+  //
+  // } else if (lastAvg > boundaryOne && avgData < boundaryOne) {
+  //   videoPlaying = midVid;
+  //   console.log("Play circ2");
+  // }
   lastAvg = avgData;
 }
 
@@ -77,19 +88,22 @@ function gotData() {
 //Rendering
 function preload(){
   noneVid= createVideo("1_2.mp4")
-  noneVid.hide();
 
   farVid = createVideo("1_2.mp4")
-  farVid.hide();
 
   midVid = createVideo("2_1.mp4")
-  midVid.hide();
 
   nearVid = createVideo("3_2.mp4")
-  nearVid.hide();
 
   vids = [noneVid, farVid, midVid, nearVid];
-  print("loaded")
+
+  // console.log(windowHeight);
+  vids.forEach(function (v) {
+    v.size(windowHeight, windowHeight);
+    v.hide();
+  })
+
+  console.log("loaded")
 }
 
 function setup() {
@@ -114,32 +128,47 @@ function setup() {
 }
 
 function playVid(i) {
+  console.log("playing video " + i)
   vids[videoPlaying].stop();
   vids[videoPlaying].hide();
 
   vids[i].show();
-  vids[i].play();
+  vids[i].loop();
 
   videoPlaying = i;
 }
 
 function keyPressed() {
-  //Space controls video playback
-  if (keyCode === 32) {
-    if (isPlaying) {
-      console.log("Stop");
-    } else {
-      console.log("Play");
-    }
-    isPlaying = !isPlaying;
-  } if (keyCode === LEFT_ARROW) {
-    playVid(1);
-    console.log("Far");
-  } else if (keyCode === UP_ARROW) {
-    playVid(2);
-    console.log("Mid");
-  } else if (keyCode == RIGHT_ARROW) {
-    playVid(3);
-    console.log("Near");
+  switch(keyCode) {
+    case 49: //1
+      avgData = 100;
+      handleAvgData();
+      break;
+    case 50: //2
+      avgData = 70;
+      handleAvgData();
+      break;
+    case 51: //3
+      avgData = 50;
+      handleAvgData();
+      break;
+    case 52: //4
+      avgData = 30;
+      handleAvgData();
+      break;
+    case LEFT_ARROW:
+      playVid(1);
+      console.log("far");
+      break;
+    case UP_ARROW:
+      playVid(2);
+      console.log("mid");
+      break;
+    case RIGHT_ARROW:
+      playVid(3);
+      console.log("near");
+      break;
+    default:
+      console.log("unregistered key");
   }
 }
