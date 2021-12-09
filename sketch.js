@@ -4,7 +4,7 @@ let portAddr = "/dev/tty.usbmodem141201";
 
 //Distances
 const boundaryOne = 200;
-const boundaries = [700,500,300];
+const boundaries = [2000,1000,500];
 const buffer = 5;
 
 let lastData;
@@ -77,11 +77,11 @@ function gotData() {
 //---------------
 //Rendering
 function preload(){
-  noneVid= createVideo("1_2.mp4")
+  noneVid= createVideo("./Assets/0_outside.mp4")
 
-  farVid = createVideo("1_2.mp4")
+  farVid = createVideo("./Assets/1_far.mp4")
 
-  midVid = createVideo("2_1.mp4")
+  midVid = createVideo("./Assets/2_mid.mp4")
 
   nearVid = createVideo("3_2.mp4")
 
