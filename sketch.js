@@ -83,7 +83,7 @@ function preload(){
 
   midVid = createVideo("./Assets/2_mid.mp4")
 
-  nearVid = createVideo("3_2.mp4")
+  nearVid = createVideo("./Assets/3_near.mp4")
 
   vids = [noneVid, farVid, midVid, nearVid];
 
@@ -131,15 +131,15 @@ function playVid(i) {
 function keyPressed() {
   switch(keyCode) {
     case 49: //1
-      avgData = 300;
+      avgData = boundaries[0] + 100;
       handleAvgData();
       break;
     case 50: //2
-      avgData = 200;
+      avgData = boundaries[1] + 100;
       handleAvgData();
       break;
     case 51: //3
-      avgData = 100;
+      avgData = boundaries[2] + 100;
       handleAvgData();
       break;
     case 52: //4
